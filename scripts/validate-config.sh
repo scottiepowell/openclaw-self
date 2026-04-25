@@ -109,7 +109,7 @@ for (const warning of warnings) {
 console.log('[OK] repo policy checks complete');
 EOF
 
-echo "[4/4] Required agent role docs"
+echo "[4/5] Required agent role docs"
 
 required_agent_docs=(
   "agents/openclaw-architect.md"
@@ -135,5 +135,82 @@ if [ "$missing_agent_docs" -ne 0 ]; then
 fi
 
 echo "[OK] required agent docs complete"
+
+echo "[5/5] Agent and skill reference checks"
+node - <<'EOF' "$CONFIG_ABS" "$BUNDLED_JSON5"
+const fs = require('fs');
+const path = require('path');
+const configPath = process.argv[2];
+const json5Path = process.argv[3];
+const JSON5 = require(json5Path);
+
+const repoRoot = path.dirname(path.dirname(configPath));
+const cfg = JSON5.parse(fs.readFileSync(configPath, 'utf8'));
+const errors = [];
+const ok = [];
+
+const configuredAgents = Array.isArray(cfg.agents?.list) ? cfg.agents.list : [];
+const configuredAgentIds = new Set(configuredAgents.map((agent) => agent?.id).filter(Boolean));
+const expectedAgentDocs = new Map([
+  ['openclaw-architect', 'agents/openclaw-architect.md'],
+  ['python-dev', 'agents/python-dev.md'],
+  ['devops', 'agents/devops.md'],
+  ['reviewer', 'agents/reviewer.md'],
+  ['docs', 'agents/docs.md'],
+  ['security', 'agents/security.md'],
+]);
+
+for (const [agentId, relPath] of expectedAgentDocs.entries()) {
+  const absPath = path.join(repoRoot, relPath);
+  if (!configuredAgentIds.has(agentId)) {
+    errors.push(`required agent id missing from config: ${agentId}`);
+  } else if (!fs.existsSync(absPath)) {
+    errors.push(`required agent doc missing for ${agentId}: ${relPath}`);
+  } else {
+    ok.push(`${agentId} -> ${relPath}`);
+  }
+}
+
+const referencedSkills = new Set();
+for (const skill of cfg.agents?.defaults?.skills || []) referencedSkills.add(skill);
+for (const agent of configuredAgents) {
+  for (const skill of agent?.skills || []) referencedSkills.add(skill);
+}
+
+for (const skill of [...referencedSkills].sort()) {
+  const relPath = `skills/${skill}/SKILL.md`;
+  const absPath = path.join(repoRoot, relPath);
+  if (!fs.existsSync(absPath)) {
+    errors.push(`referenced skill missing: ${relPath}`);
+  } else {
+    ok.push(`skill -> ${relPath}`);
+  }
+}
+
+for (const agent of configuredAgents) {
+  const allowAgents = agent?.subagents?.allowAgents;
+  if (!Array.isArray(allowAgents)) continue;
+  for (const target of allowAgents) {
+    if (!configuredAgentIds.has(target)) {
+      errors.push(`agent ${agent.id} allows unknown subagent id: ${target}`);
+    }
+  }
+}
+
+for (const target of cfg.agents?.defaults?.subagents?.allowAgents || []) {
+  if (!configuredAgentIds.has(target)) {
+    errors.push(`agents.defaults.subagents.allowAgents contains unknown id: ${target}`);
+  }
+}
+
+for (const line of ok) {
+  console.log('[OK]', line);
+}
+for (const line of errors) {
+  console.log('[ERROR]', line);
+}
+if (errors.length > 0) process.exit(1);
+console.log('[OK] agent and skill reference checks complete');
+EOF
 
 echo "[OK] validation complete"
