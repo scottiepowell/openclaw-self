@@ -93,9 +93,14 @@ if (cfg.agents?.defaults?.subagents?.requireAgentId !== true) {
   warnings.push('agents.defaults.subagents.requireAgentId should usually be true in this repo to keep delegation explicit.');
 }
 
-const architectAllow = cfg.agents?.list?.find((agent) => agent?.id === 'openclaw-architect')?.subagents?.allowAgents;
+const architect = cfg.agents?.list?.find((agent) => agent?.id === 'openclaw-architect');
+const architectAllow = architect?.subagents?.allowAgents;
 if (!Array.isArray(architectAllow) || architectAllow.length === 0) {
   warnings.push('openclaw-architect should usually have an explicit subagent allowlist.');
+}
+
+if (architect?.name !== 'Wright') {
+  warnings.push('openclaw-architect should usually use the display name "Wright" in this repo.');
 }
 
 for (const warning of warnings) {
@@ -103,5 +108,32 @@ for (const warning of warnings) {
 }
 console.log('[OK] repo policy checks complete');
 EOF
+
+echo "[4/4] Required agent role docs"
+
+required_agent_docs=(
+  "agents/openclaw-architect.md"
+  "agents/python-dev.md"
+  "agents/devops.md"
+  "agents/reviewer.md"
+  "agents/docs.md"
+  "agents/security.md"
+)
+
+missing_agent_docs=0
+for doc in "${required_agent_docs[@]}"; do
+  if [ -f "$doc" ]; then
+    echo "[OK] $doc"
+  else
+    echo "[ERROR] Missing required agent doc: $doc"
+    missing_agent_docs=1
+  fi
+done
+
+if [ "$missing_agent_docs" -ne 0 ]; then
+  exit 1
+fi
+
+echo "[OK] required agent docs complete"
 
 echo "[OK] validation complete"
