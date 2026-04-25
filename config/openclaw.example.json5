@@ -1,0 +1,117 @@
+{
+  // Version-controlled example config only. Do not place live secrets here.
+  agents: {
+    defaults: {
+      model: {
+        primary: "openai-codex/gpt-5.4",
+        fallbacks: [],
+      },
+      workspace: "/home/scott/projects/openclaw-self",
+      skills: [
+        "repo-triage",
+        "openclaw-config-dev",
+      ],
+      subagents: {
+        maxSpawnDepth: 1,
+        maxChildrenPerAgent: 3,
+        maxConcurrent: 3,
+        runTimeoutSeconds: 900,
+      },
+    },
+    list: [
+      {
+        id: "openclaw-architect",
+        name: "OpenClaw Architect",
+        workspace: "/home/scott/projects/openclaw-self",
+        model: "openai-codex/gpt-5.4",
+        skills: ["repo-triage", "openclaw-config-dev", "vscode-workflow"],
+      },
+      {
+        id: "python-dev",
+        name: "Python Dev",
+        workspace: "/home/scott/projects/openclaw-self",
+        model: "openai-codex/gpt-5.4",
+        skills: ["repo-triage", "python-project-dev"],
+      },
+      {
+        id: "devops",
+        name: "Homelab DevOps",
+        workspace: "/home/scott/projects/openclaw-self",
+        model: "openai-codex/gpt-5.4",
+        skills: ["repo-triage", "homelab-devops"],
+      },
+      {
+        id: "reviewer",
+        name: "Code Reviewer",
+        workspace: "/home/scott/projects/openclaw-self",
+        model: "openai-codex/gpt-5.4",
+        skills: ["repo-triage", "openclaw-config-dev"],
+      },
+      {
+        id: "docs",
+        name: "Docs Writer",
+        workspace: "/home/scott/projects/openclaw-self",
+        model: "openai-codex/gpt-5.4",
+        skills: ["repo-triage", "vscode-workflow"],
+      },
+      {
+        id: "security",
+        name: "Security Reviewer",
+        workspace: "/home/scott/projects/openclaw-self",
+        model: "openai-codex/gpt-5.4",
+        skills: ["repo-triage", "openclaw-config-dev"],
+      },
+    ],
+  },
+
+  tools: {
+    profile: "full",
+    deny: [
+      "camera.*",
+      "screen.record",
+      "contacts.*",
+      "calendar.*",
+      "reminders.*",
+      "sms.*",
+    ],
+    exec: {
+      host: "gateway",
+      security: "full",
+      ask: "on",
+    },
+    web: {
+      search: {
+        enabled: true,
+        provider: "firecrawl",
+        openaiCodex: {},
+      },
+      fetch: {
+        enabled: true,
+        provider: "firecrawl",
+      },
+    },
+  },
+
+  session: {
+    dmScope: "per-channel-peer",
+  },
+
+  channels: {
+    discord: {
+      enabled: true,
+      token: "USE_ENV_OR_LOCAL_SECRET",
+      groupPolicy: "allowlist",
+      threadBindings: {
+        enabled: true,
+        idleHours: 12,
+        maxAgeHours: 72,
+        spawnAcpSessions: true,
+      },
+      guilds: {
+        "*": {
+          requireMention: false,
+        },
+      },
+    },
+  },
+}

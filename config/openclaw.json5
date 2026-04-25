@@ -1,0 +1,6 @@
+// Copy this file to config/openclaw.local.json5 or another untracked location
+// before adding real IDs, channels, or credentials.
+{
+  $schema: "OpenClaw local working config",
+  extends: "./openclaw.example.json5",
+}

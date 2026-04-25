@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "ms-vscode-remote.remote-ssh",
+    "ms-vscode-remote.remote-wsl",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+    "ms-python.python",
+    "ms-azuretools.vscode-docker"
+  ]
+}

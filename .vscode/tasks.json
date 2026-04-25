@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "OpenClaw: Doctor",
+      "type": "shell",
+      "command": "bash scripts/doctor.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "OpenClaw: Validate Config",
+      "type": "shell",
+      "command": "bash scripts/validate-config.sh",
+      "problemMatcher": []
+    },
+    {
+      "label": "OpenClaw: Git Diff",
+      "type": "shell",
+      "command": "git diff -- config agents skills docs scripts",
+      "problemMatcher": []
+    },
+    {
+      "label": "OpenClaw: Backup Live Config",
+      "type": "shell",
+      "command": "bash scripts/backup-openclaw.sh",
+      "problemMatcher": []
+    }
+  ]
+}

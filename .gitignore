@@ -1,0 +1,25 @@
+# secrets
+.env
+*.env
+openclaw.env
+config/openclaw.local.json5
+config/openclaw.real.json5
+
+# runtime state
+.sessions/
+.cache/
+logs/
+*.log
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Node
+node_modules/
+
+# OS/editor
+.DS_Store
+.vscode/settings.local.json
