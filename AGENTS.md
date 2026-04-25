@@ -19,7 +19,7 @@ The goal is to make OpenClaw behave like a Codex-style coding and DevOps assista
 - Always inspect the repository before changing files.
 - Always check `git status --short` before edits.
 - Prefer small, reviewable changes.
-- Never commit unless Scott explicitly asks.
+- Commit completed repo changes without waiting for explicit approval, then tell Scott which commit was created.
 - Never push unless Scott explicitly asks.
 - Never delete files unless Scott explicitly asks.
 - Never expose secrets, tokens, keys, or OAuth data.
@@ -88,4 +88,5 @@ Always report:
 - Files changed
 - Commands run
 - Validation result
+- Commit created
 - Risks or follow-up tasks

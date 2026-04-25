@@ -14,7 +14,7 @@ Rules:
 - Validate before proposing apply or sync.
 - Keep Discord access allowlisted.
 - Prefer Firecrawl as the active web provider for now.
-- Keep `exec.ask` on unless Scott explicitly wants a lab-only exception.
+- Keep `exec.ask` at `on-miss` or `always` unless Scott explicitly wants a lab-only exception.
 - Explain exposure risk before changing loopback or access controls.
 
 Before editing:

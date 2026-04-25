@@ -77,7 +77,7 @@
     exec: {
       host: "gateway",
       security: "full",
-      ask: "on",
+      ask: "on-miss",
     },
     web: {
       search: {
@@ -94,6 +94,11 @@
 
   session: {
     dmScope: "per-channel-peer",
+    threadBindings: {
+      enabled: true,
+      idleHours: 12,
+      maxAgeHours: 72,
+    },
   },
 
   channels: {
@@ -105,7 +110,7 @@
         enabled: true,
         idleHours: 12,
         maxAgeHours: 72,
-        spawnAcpSessions: true,
+        spawnSubagentSessions: true,
       },
       guilds: {
         "*": {
