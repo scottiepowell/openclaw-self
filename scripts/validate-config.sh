@@ -85,6 +85,19 @@ if (cfg.agents?.defaults?.workspace !== '/home/scott/projects/openclaw-self') {
   warnings.push('agents.defaults.workspace does not point at the repo workspace.');
 }
 
+if (cfg.agents?.defaults?.repoRoot !== '/home/scott/projects/openclaw-self') {
+  warnings.push('agents.defaults.repoRoot does not point at the repo root.');
+}
+
+if (cfg.agents?.defaults?.subagents?.requireAgentId !== true) {
+  warnings.push('agents.defaults.subagents.requireAgentId should usually be true in this repo to keep delegation explicit.');
+}
+
+const architectAllow = cfg.agents?.list?.find((agent) => agent?.id === 'openclaw-architect')?.subagents?.allowAgents;
+if (!Array.isArray(architectAllow) || architectAllow.length === 0) {
+  warnings.push('openclaw-architect should usually have an explicit subagent allowlist.');
+}
+
 for (const warning of warnings) {
   console.log('[WARN]', warning);
 }

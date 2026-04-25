@@ -7,6 +7,8 @@
         fallbacks: [],
       },
       workspace: "/home/scott/projects/openclaw-self",
+      repoRoot: "/home/scott/projects/openclaw-self",
+      thinkingDefault: "medium",
       skills: [
         "repo-triage",
         "openclaw-config-dev",
@@ -16,6 +18,15 @@
         maxChildrenPerAgent: 3,
         maxConcurrent: 3,
         runTimeoutSeconds: 900,
+        requireAgentId: true,
+        allowAgents: [
+          "openclaw-architect",
+          "python-dev",
+          "devops",
+          "reviewer",
+          "docs",
+          "security",
+        ],
       },
     },
     list: [
@@ -25,6 +36,10 @@
         workspace: "/home/scott/projects/openclaw-self",
         model: "openai-codex/gpt-5.4",
         skills: ["repo-triage", "openclaw-config-dev", "vscode-workflow"],
+        subagents: {
+          requireAgentId: true,
+          allowAgents: ["python-dev", "devops", "reviewer", "docs", "security"],
+        },
       },
       {
         id: "python-dev",
@@ -32,6 +47,10 @@
         workspace: "/home/scott/projects/openclaw-self",
         model: "openai-codex/gpt-5.4",
         skills: ["repo-triage", "python-project-dev"],
+        subagents: {
+          requireAgentId: true,
+          allowAgents: ["reviewer", "docs", "security"],
+        },
       },
       {
         id: "devops",
@@ -39,6 +58,10 @@
         workspace: "/home/scott/projects/openclaw-self",
         model: "openai-codex/gpt-5.4",
         skills: ["repo-triage", "homelab-devops"],
+        subagents: {
+          requireAgentId: true,
+          allowAgents: ["reviewer", "docs", "security"],
+        },
       },
       {
         id: "reviewer",
@@ -46,6 +69,10 @@
         workspace: "/home/scott/projects/openclaw-self",
         model: "openai-codex/gpt-5.4",
         skills: ["repo-triage", "openclaw-config-dev"],
+        subagents: {
+          requireAgentId: true,
+          allowAgents: [],
+        },
       },
       {
         id: "docs",
@@ -53,6 +80,10 @@
         workspace: "/home/scott/projects/openclaw-self",
         model: "openai-codex/gpt-5.4",
         skills: ["repo-triage", "vscode-workflow"],
+        subagents: {
+          requireAgentId: true,
+          allowAgents: ["reviewer"],
+        },
       },
       {
         id: "security",
@@ -60,6 +91,10 @@
         workspace: "/home/scott/projects/openclaw-self",
         model: "openai-codex/gpt-5.4",
         skills: ["repo-triage", "openclaw-config-dev"],
+        subagents: {
+          requireAgentId: true,
+          allowAgents: ["reviewer", "docs"],
+        },
       },
     ],
   },
