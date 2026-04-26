@@ -136,7 +136,7 @@ fi
 
 echo "[OK] required agent docs complete"
 
-echo "[5/5] Agent and skill reference checks"
+echo "[5/6] Agent and skill reference checks"
 node - <<'EOF' "$CONFIG_ABS" "$BUNDLED_JSON5"
 const fs = require('fs');
 const path = require('path');
@@ -211,6 +211,82 @@ for (const line of errors) {
 }
 if (errors.length > 0) process.exit(1);
 console.log('[OK] agent and skill reference checks complete');
+EOF
+
+echo "[6/6] Role doc and config alignment checks"
+node - <<'EOF' "$CONFIG_ABS" "$BUNDLED_JSON5"
+const fs = require('fs');
+const path = require('path');
+const configPath = process.argv[2];
+const json5Path = process.argv[3];
+const JSON5 = require(json5Path);
+
+const repoRoot = path.dirname(path.dirname(configPath));
+const cfg = JSON5.parse(fs.readFileSync(configPath, 'utf8'));
+const errors = [];
+const ok = [];
+
+const architect = (cfg.agents?.list || []).find((agent) => agent?.id === 'openclaw-architect');
+const architectDocPath = path.join(repoRoot, 'agents/openclaw-architect.md');
+const architectDoc = fs.existsSync(architectDocPath) ? fs.readFileSync(architectDocPath, 'utf8') : '';
+
+if (!architect) {
+  errors.push('openclaw-architect config entry is missing.');
+} else {
+  if (architect.name !== 'Wright') {
+    errors.push('openclaw-architect must use display name "Wright" in config.');
+  } else {
+    ok.push('openclaw-architect display name matches Wright');
+  }
+
+  const architectSkills = new Set(architect.skills || []);
+  for (const skill of ['repo-triage', 'openclaw-config-dev', 'vscode-workflow']) {
+    if (!architectSkills.has(skill)) {
+      errors.push(`openclaw-architect is missing expected skill: ${skill}`);
+    }
+  }
+  if (architectSkills.has('repo-triage') && architectSkills.has('openclaw-config-dev') && architectSkills.has('vscode-workflow')) {
+    ok.push('openclaw-architect skills align with the repo contract');
+  }
+}
+
+if (!architectDoc.includes('# Wright')) {
+  errors.push('agents/openclaw-architect.md should start with the Wright role heading.');
+} else {
+  ok.push('architect doc uses Wright heading');
+}
+
+if (!architectDoc.includes('stable agent id is `openclaw-architect`')) {
+  errors.push('agents/openclaw-architect.md should mention the stable agent id `openclaw-architect`.');
+} else {
+  ok.push('architect doc mentions stable agent id');
+}
+
+if (!architectDoc.includes('Commit completed repo changes when they are validated and reviewable.')) {
+  errors.push('agents/openclaw-architect.md still appears out of sync with the repo commit policy.');
+} else {
+  ok.push('architect doc matches commit policy');
+}
+
+const configSkillPath = path.join(repoRoot, 'skills/openclaw-config-dev/SKILL.md');
+const configSkillDoc = fs.existsSync(configSkillPath) ? fs.readFileSync(configSkillPath, 'utf8') : '';
+if (configSkillDoc.includes('`exec.ask` on')) {
+  errors.push('skills/openclaw-config-dev/SKILL.md contains obsolete `exec.ask` on guidance.');
+}
+if (!configSkillDoc.includes('`exec.ask` at `on-miss` or `always`')) {
+  errors.push('skills/openclaw-config-dev/SKILL.md should document `exec.ask` as `on-miss` or `always`.');
+} else {
+  ok.push('openclaw-config-dev skill matches exec.ask guidance');
+}
+
+for (const line of ok) {
+  console.log('[OK]', line);
+}
+for (const line of errors) {
+  console.log('[ERROR]', line);
+}
+if (errors.length > 0) process.exit(1);
+console.log('[OK] role doc and config alignment checks complete');
 EOF
 
 echo "[OK] validation complete"
