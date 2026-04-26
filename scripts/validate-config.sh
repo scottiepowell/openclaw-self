@@ -109,7 +109,7 @@ for (const warning of warnings) {
 console.log('[OK] repo policy checks complete');
 EOF
 
-echo "[4/5] Required agent role docs"
+echo "[4/7] Required agent role docs"
 
 required_agent_docs=(
   "agents/openclaw-architect.md"
@@ -136,7 +136,7 @@ fi
 
 echo "[OK] required agent docs complete"
 
-echo "[5/6] Agent and skill reference checks"
+echo "[5/7] Agent and skill reference checks"
 node - <<'EOF' "$CONFIG_ABS" "$BUNDLED_JSON5"
 const fs = require('fs');
 const path = require('path');
@@ -213,7 +213,7 @@ if (errors.length > 0) process.exit(1);
 console.log('[OK] agent and skill reference checks complete');
 EOF
 
-echo "[6/6] Role doc and config alignment checks"
+echo "[6/7] Role doc and config alignment checks"
 node - <<'EOF' "$CONFIG_ABS" "$BUNDLED_JSON5"
 const fs = require('fs');
 const path = require('path');
@@ -287,6 +287,95 @@ for (const line of errors) {
 }
 if (errors.length > 0) process.exit(1);
 console.log('[OK] role doc and config alignment checks complete');
+EOF
+
+echo "[7/7] Repo asset contract checks"
+node - <<'EOF' "$CONFIG_ABS"
+const fs = require('fs');
+const path = require('path');
+const configPath = process.argv[2];
+const repoRoot = path.dirname(path.dirname(configPath));
+const errors = [];
+const ok = [];
+
+const requiredDocs = [
+  'AGENTS.md',
+  'README.md',
+  'CHANGELOG.md',
+  'docs/architecture.md',
+  'docs/discord-ttp.md',
+  'docs/runbook.md',
+  'docs/security-model.md',
+  'docs/vscode-ttp.md',
+  'tests/README.md',
+];
+const requiredScripts = [
+  'scripts/doctor.sh',
+  'scripts/validate-config.sh',
+  'scripts/backup-openclaw.sh',
+  'scripts/sync-openclaw-config.sh',
+];
+const requiredVsCodeFiles = [
+  '.vscode/tasks.json',
+  '.vscode/extensions.json',
+];
+
+for (const relPath of [...requiredDocs, ...requiredScripts, ...requiredVsCodeFiles, 'Makefile']) {
+  const absPath = path.join(repoRoot, relPath);
+  if (!fs.existsSync(absPath)) {
+    errors.push(`required repo asset missing: ${relPath}`);
+  } else {
+    ok.push(`asset -> ${relPath}`);
+  }
+}
+
+const makefilePath = path.join(repoRoot, 'Makefile');
+if (fs.existsSync(makefilePath)) {
+  const makefile = fs.readFileSync(makefilePath, 'utf8');
+  for (const target of ['doctor:', 'validate:', 'diff:', 'backup:', 'sync:']) {
+    if (!makefile.includes(`\n${target}`) && !makefile.startsWith(target)) {
+      errors.push(`Makefile missing expected target: ${target.replace(':', '')}`);
+    }
+  }
+  if (makefile.includes('validate:')) ok.push('Makefile contains expected core targets');
+}
+
+const tasksPath = path.join(repoRoot, '.vscode/tasks.json');
+if (fs.existsSync(tasksPath)) {
+  const tasks = JSON.parse(fs.readFileSync(tasksPath, 'utf8'));
+  const labels = new Set((tasks.tasks || []).map((task) => task.label));
+  for (const label of ['OpenClaw: Doctor', 'OpenClaw: Validate Config', 'OpenClaw: Git Diff', 'OpenClaw: Backup Live Config']) {
+    if (!labels.has(label)) {
+      errors.push(`.vscode/tasks.json missing expected task: ${label}`);
+    }
+  }
+  if (labels.has('OpenClaw: Doctor') && labels.has('OpenClaw: Validate Config')) {
+    ok.push('VS Code tasks contain expected OpenClaw workflow entries');
+  }
+}
+
+const extensionsPath = path.join(repoRoot, '.vscode/extensions.json');
+if (fs.existsSync(extensionsPath)) {
+  const extensions = JSON.parse(fs.readFileSync(extensionsPath, 'utf8'));
+  const recs = new Set(extensions.recommendations || []);
+  for (const ext of ['ms-python.python', 'ms-azuretools.vscode-docker']) {
+    if (!recs.has(ext)) {
+      errors.push(`.vscode/extensions.json missing expected recommendation: ${ext}`);
+    }
+  }
+  if (recs.has('ms-python.python') && recs.has('ms-azuretools.vscode-docker')) {
+    ok.push('VS Code extension recommendations contain core entries');
+  }
+}
+
+for (const line of ok) {
+  console.log('[OK]', line);
+}
+for (const line of errors) {
+  console.log('[ERROR]', line);
+}
+if (errors.length > 0) process.exit(1);
+console.log('[OK] repo asset contract checks complete');
 EOF
 
 echo "[OK] validation complete"
