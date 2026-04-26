@@ -1,10 +1,16 @@
-.PHONY: doctor validate diff review backup sync
+.PHONY: doctor validate validate-all diff review backup sync
 
 doctor:
 	bash scripts/doctor.sh
 
 validate:
 	bash scripts/validate-config.sh
+
+validate-all:
+	bash -n scripts/*.sh
+	bash scripts/validate-config.sh
+	bash scripts/review-diff.sh
+	bash scripts/doctor.sh
 
 diff:
 	git diff -- config agents skills docs scripts AGENTS.md README.md Makefile

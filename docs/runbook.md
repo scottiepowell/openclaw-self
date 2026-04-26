@@ -5,6 +5,7 @@
 ```bash
 make doctor
 make validate
+make validate-all
 make review
 make diff
 ```

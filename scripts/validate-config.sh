@@ -307,6 +307,7 @@ const requiredDocs = [
   'docs/runbook.md',
   'docs/security-model.md',
   'docs/vscode-ttp.md',
+  'docs/project-bootstrap.md',
   'tests/README.md',
 ];
 const requiredScripts = [
@@ -333,7 +334,7 @@ for (const relPath of [...requiredDocs, ...requiredScripts, ...requiredVsCodeFil
 const makefilePath = path.join(repoRoot, 'Makefile');
 if (fs.existsSync(makefilePath)) {
   const makefile = fs.readFileSync(makefilePath, 'utf8');
-  for (const target of ['doctor:', 'validate:', 'diff:', 'review:', 'backup:', 'sync:']) {
+  for (const target of ['doctor:', 'validate:', 'validate-all:', 'diff:', 'review:', 'backup:', 'sync:']) {
     if (!makefile.includes(`\n${target}`) && !makefile.startsWith(target)) {
       errors.push(`Makefile missing expected target: ${target.replace(':', '')}`);
     }
@@ -345,7 +346,7 @@ const tasksPath = path.join(repoRoot, '.vscode/tasks.json');
 if (fs.existsSync(tasksPath)) {
   const tasks = JSON.parse(fs.readFileSync(tasksPath, 'utf8'));
   const labels = new Set((tasks.tasks || []).map((task) => task.label));
-  for (const label of ['OpenClaw: Doctor', 'OpenClaw: Validate Config', 'OpenClaw: Git Diff', 'OpenClaw: Review Diff', 'OpenClaw: Backup Live Config']) {
+  for (const label of ['OpenClaw: Doctor', 'OpenClaw: Validate Config', 'OpenClaw: Validate All', 'OpenClaw: Git Diff', 'OpenClaw: Review Diff', 'OpenClaw: Backup Live Config']) {
     if (!labels.has(label)) {
       errors.push(`.vscode/tasks.json missing expected task: ${label}`);
     }
