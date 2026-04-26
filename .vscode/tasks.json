@@ -20,6 +20,12 @@
       "problemMatcher": []
     },
     {
+      "label": "OpenClaw: Review Diff",
+      "type": "shell",
+      "command": "bash scripts/review-diff.sh",
+      "problemMatcher": []
+    },
+    {
       "label": "OpenClaw: Backup Live Config",
       "type": "shell",
       "command": "bash scripts/backup-openclaw.sh",

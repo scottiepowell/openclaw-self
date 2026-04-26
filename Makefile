@@ -1,4 +1,4 @@
-.PHONY: doctor validate diff backup sync
+.PHONY: doctor validate diff review backup sync
 
 doctor:
 	bash scripts/doctor.sh
@@ -8,6 +8,9 @@ validate:
 
 diff:
 	git diff -- config agents skills docs scripts AGENTS.md README.md Makefile
+
+review:
+	bash scripts/review-diff.sh
 
 backup:
 	bash scripts/backup-openclaw.sh

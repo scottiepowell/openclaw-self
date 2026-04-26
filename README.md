@@ -23,6 +23,7 @@ OpenClaw itself is the first managed dev project.
 cd ~/projects/openclaw-self
 make doctor
 make validate
+make review
 code .
 ```
 
@@ -32,9 +33,10 @@ code .
 2. Ask OpenClaw to use the appropriate agent role.
 3. Make small changes.
 4. Run validation.
-5. Review `git diff`.
-6. Backup live config.
-7. Sync to live config only after approval.
+5. Run `make review` to summarize the current diff and risk areas.
+6. Review `git diff` if needed.
+7. Backup live config.
+8. Sync to live config only after approval.
 
 ## Safety
 
