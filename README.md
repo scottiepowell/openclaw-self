@@ -44,6 +44,28 @@ code .
 
 Do not commit secrets. Do not run destructive commands without explicit approval.
 
+## Project model
+
+`openclaw-self` is the core platform project for OpenClaw itself.
+
+Use it to manage:
+- OpenClaw config
+- agent definitions
+- local skills
+- validation scripts
+- project bootstrap rules
+- safety model
+
+Do not place unrelated automation or app projects inside this repo.
+
+Create child projects under:
+
+```text
+~/projects/<project-name>
+```
+
+Current child projects are tracked in `docs/managed-projects.md`.
+
 ## Starting a new coding project
 
 Create new projects under `~/projects/<project-name>`, not inside `openclaw-self`.
