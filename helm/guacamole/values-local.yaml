@@ -1,0 +1,86 @@
+# Local-first Guacamole install values
+#
+# Chart: helmforge/guacamole
+# - guacamole web app
+# - guacd sidecar
+# - bundled PostgreSQL subchart
+#
+# Cluster note:
+# - Use the NFS-backed StorageClass here.
+# - Current cluster has `nfs-client` and `nfs-static`; this scaffold assumes `nfs-client`.
+
+nameOverride: ""
+fullnameOverride: ""
+commonLabels:
+  app.kubernetes.io/part-of: guacamole
+
+image:
+  repository: docker.io/guacamole/guacamole
+  tag: "1.6.0"
+
+guacd:
+  image:
+    repository: docker.io/guacamole/guacd
+    tag: "1.6.0"
+  logLevel: info
+
+guacamole:
+  contextPath: ROOT
+  extraEnv: []
+
+proxy:
+  enabled: true
+  ipHeader: X-Forwarded-For
+  protocolHeader: X-Forwarded-Proto
+
+oidc:
+  enabled: false
+
+saml:
+  enabled: false
+
+totp:
+  enabled: false
+
+database:
+  type: postgresql
+
+initDb:
+  enabled: true
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+probes:
+  startup:
+    enabled: true
+  liveness:
+    enabled: true
+  readiness:
+    enabled: true
+
+backup:
+  enabled: false
+
+postgresql:
+  enabled: true
+  architecture: standalone
+  auth:
+    database: guacamole_db
+    username: guacamole_user
+    existingSecret: guacamole-postgresql-auth
+  standalone:
+    persistence:
+      enabled: true
+      storageClass: nfs-client
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
+
+mysql:
+  enabled: false
+

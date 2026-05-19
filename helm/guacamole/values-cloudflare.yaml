@@ -1,0 +1,40 @@
+# Future Cloudflare Tunnel values
+#
+# This file is a planning scaffold only.
+# Do not apply Cloudflare exposure until the tunnel, DNS, and access policy are ready.
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  ingressClassName: cloudflare
+  annotations: {}
+  hosts:
+    - host: guacamole.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+postgresql:
+  enabled: true
+  architecture: standalone
+  auth:
+    database: guacamole_db
+    username: guacamole_user
+    existingSecret: guacamole-postgresql-auth
+  standalone:
+    persistence:
+      enabled: true
+      storageClass: nfs-client
+      accessModes:
+        - ReadWriteOnce
+      size: 8Gi
+
+backup:
+  enabled: false
