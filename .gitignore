@@ -1,25 +1,104 @@
-# secrets
+# ============================================================
+# OpenClaw self repo ignore rules
+# Keep docs, examples, agents, scripts, and skills tracked.
+# Keep live secrets, runtime state, local machine state, and logs out of git.
+# ============================================================
+
+# ----------------------------
+# Secrets / environment files
+# ----------------------------
 .env
 *.env
 openclaw.env
+.env.*
+!.env.example
+
+# ----------------------------
+# Live OpenClaw config
+# ----------------------------
+config/openclaw.json5
 config/openclaw.local.json5
 config/openclaw.real.json5
+config/*.local.json5
+config/*.real.json5
 
-# runtime state
+# Keep sanitized examples
+!config/openclaw.example.json5
+!config/env.example
+
+# ----------------------------
+# Credentials / tokens / keys
+# ----------------------------
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.kubeconfig
+kubeconfig*
+credentials*
+auth-profiles.json
+tokens.json
+
+# ----------------------------
+# Runtime state
+# ----------------------------
 .sessions/
 .cache/
 logs/
 *.log
+*.pid
+*.sock
+tmp/
+temp/
 
+# ----------------------------
+# Backups / generated archives
+# ----------------------------
+backups/*
+!backups/.gitkeep
+*.bak
+*.backup
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+
+# ----------------------------
 # Python
+# ----------------------------
 .venv/
+venv/
 __pycache__/
 *.pyc
+*.pyo
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
+# ----------------------------
 # Node
+# ----------------------------
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# OS/editor
+# ----------------------------
+# OS / editor
+# ----------------------------
 .DS_Store
+Thumbs.db
 .vscode/settings.local.json
+.idea/
+*.swp
+*.swo
+
+# ----------------------------
+# Local scratch files
+# ----------------------------
+scratch/
+notes.local.md
+*.local.md

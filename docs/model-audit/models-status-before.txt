@@ -1,0 +1,19 @@
+Config        : ~/.openclaw/openclaw.json
+Agent dir     : ~/.openclaw/agents/main/agent
+Default       : openai-codex/gpt-5.4
+Fallbacks (0) : -
+Image model   : -
+Image fallbacks (0): -
+Aliases (0)   : -
+Configured models (1): openai-codex/gpt-5.4
+
+Auth overview
+Auth store    : ~/.openclaw/agents/main/agent/auth-profiles.json
+Shell env     : off
+Providers w/ OAuth/tokens (1): openai-codex (1)
+- ollama effective=profiles:~/.openclaw/agents/main/agent/auth-profiles.json | profiles=1 (oauth=0, token=0, api_key=1) | ollama:default=marker(ollama-local) | models.json=marker(ollama-local) | source=models.json: ~/.openclaw/agents/main/agent/models.json | synthetic=plugin-owned | source=plugin synthetic auth
+- openai-codex effective=profiles:~/.openclaw/agents/main/agent/auth-profiles.json | profiles=1 (oauth=1, token=0, api_key=0) | openai-codex:scottiepowell@gmail.com=OAuth (scottiepowell@gmail.com) [cooldown 33m]
+
+OAuth/token status
+- openai-codex usage: 5h 99% left ⏱4h 59m · Week 0% left ⏱7h 16m
+  - openai-codex:scottiepowell@gmail.com (scottiepowell@gmail.com) ok expires in 3d
