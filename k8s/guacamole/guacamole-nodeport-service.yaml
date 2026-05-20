@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: guacamole-guacamole-nodeport
+  namespace: guacamole
+  labels:
+    app.kubernetes.io/instance: guacamole
+    app.kubernetes.io/name: guacamole
+    app.kubernetes.io/part-of: guacamole
+  annotations:
+    openclaw.ai/managed-by: "openclaw"
+    openclaw.ai/purpose: "lan-only-nodeport-access"
+spec:
+  type: NodePort
+  externalTrafficPolicy: Cluster
+  selector:
+    app.kubernetes.io/instance: guacamole
+    app.kubernetes.io/name: guacamole
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+      nodePort: 32080

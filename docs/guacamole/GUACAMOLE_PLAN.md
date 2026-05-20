@@ -42,6 +42,20 @@
 - PostgreSQL persistence: NFS-backed PVC
 - Cloudflare Tunnel: not deployed yet
 
+## LAN access phase
+
+- Additional NodePort service: `k8s/guacamole/guacamole-nodeport-service.yaml`
+- NodePort: `32080`
+- LAN URL shape:
+
+  ```text
+  http://<worker-01-LAN-IP>:32080/
+  ```
+
+- This is LAN-only access, not public exposure.
+- Keep Cloudflare and ingress disabled for now.
+- If access fails from another LAN machine, check node firewall, kube-proxy, and routing.
+
 ## Security hardening phase
 
 - `docs/guacamole/GUACAMOLE_SECURITY_CHECKLIST.md`
@@ -67,6 +81,7 @@
 3. Port-forward the service for first login/testing
 4. Change the default Guacamole admin password before any connection testing
 5. Create a named admin user before any public exposure work
+6. Use the LAN NodePort only after the default credentials are changed or disabled
 
 ## Port-forward test
 
@@ -75,6 +90,15 @@ kubectl -n guacamole port-forward svc/guacamole-guacamole 8080:80
 ```
 
 Then open `http://127.0.0.1:8080/`.
+
+## LAN test
+
+- NodePort service: `guacamole-guacamole-nodeport`
+- Suggested URL:
+
+  ```text
+  http://<worker-01-LAN-IP>:32080/
+  ```
 
 ## Release health checks
 
@@ -86,6 +110,8 @@ Then open `http://127.0.0.1:8080/`.
   - `kubectl -n guacamole describe deploy guacamole-guacamole`
 - Confirm the non-invasive security checks pass:
   - `bash scripts/guacamole/verify-guacamole-security.sh`
+- Show the LAN access summary:
+  - `bash scripts/guacamole/show-guacamole-access.sh`
 
 ## Rollback
 

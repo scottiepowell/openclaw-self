@@ -14,6 +14,19 @@ Open:
 http://127.0.0.1:8080/
 ```
 
+## LAN-only access path
+
+- NodePort service: `guacamole-guacamole-nodeport`
+- URL shape:
+
+  ```text
+  http://<worker-01-LAN-IP>:32080/
+  ```
+
+- This is LAN-only exposure, not Cloudflare and not public internet access.
+- If access fails from another LAN machine, check node firewall, kube-proxy, and routing.
+- Do not expose beyond the trusted LAN until `guacadmin / guacadmin` has been changed or disabled.
+
 ## First login
 
 - Log in with the default chart credentials: `guacadmin / guacadmin`
@@ -29,10 +42,12 @@ http://127.0.0.1:8080/
 
 ## Exposure rules
 
-- Keep the Kubernetes service as `ClusterIP`
+- Keep the main Kubernetes service as `ClusterIP`
+- Use the separate NodePort service only for trusted LAN access
 - Do not enable ingress unless explicitly approved
 - Do not expose Guacamole through Cloudflare until Cloudflare Access is configured
 - Cloudflare Access must protect the Guacamole hostname before the request reaches the app
+- Keep the LAN NodePort path trusted-only until the admin credentials are changed
 
 ## Cluster note
 
