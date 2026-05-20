@@ -42,6 +42,13 @@
 - PostgreSQL persistence: NFS-backed PVC
 - Cloudflare Tunnel: not deployed yet
 
+## Security hardening phase
+
+- `docs/guacamole/GUACAMOLE_SECURITY_CHECKLIST.md`
+- `docs/guacamole/GUACAMOLE_BACKUP_RESTORE.md`
+- `scripts/guacamole/backup-guacamole-db.sh`
+- `scripts/guacamole/verify-guacamole-security.sh`
+
 ## Suggested values
 
 - `helm/guacamole/values-local.yaml`
@@ -58,6 +65,8 @@
    - `helm template ... -f helm/guacamole/values-local.yaml`
 2. Install into `guacamole` namespace
 3. Port-forward the service for first login/testing
+4. Change the default Guacamole admin password before any connection testing
+5. Create a named admin user before any public exposure work
 
 ## Port-forward test
 
@@ -75,6 +84,8 @@ Then open `http://127.0.0.1:8080/`.
   - `bash scripts/guacamole/test-guacamole.sh`
 - Confirm the live deployment is still on `worker-01`:
   - `kubectl -n guacamole describe deploy guacamole-guacamole`
+- Confirm the non-invasive security checks pass:
+  - `bash scripts/guacamole/verify-guacamole-security.sh`
 
 ## Rollback
 

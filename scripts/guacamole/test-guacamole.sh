@@ -31,3 +31,4 @@ helm -n "$NAMESPACE" status "$RELEASE" || true
 echo "[4/4] Port-forward test command"
 echo "kubectl -n $NAMESPACE port-forward svc/${RELEASE}-guacamole 8080:80"
 echo "Then open http://127.0.0.1:8080/"
+echo "Reminder: change guacadmin / guacadmin immediately after first login."
