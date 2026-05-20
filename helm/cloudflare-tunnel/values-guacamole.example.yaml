@@ -1,13 +1,13 @@
-# Draft/example only.
-# Target: a Cloudflare Tunnel Helm chart or wrapper chart that deploys cloudflared.
-# This file does not contain secrets and does not deploy anything by itself.
-# Adjust the keys below to match the actual chart schema before use.
+# Example-only scaffolding for a future Cloudflare Tunnel Helm chart.
+# Target chart: verify the actual chart schema before use.
+# This file is secretless and does not deploy anything by itself.
 
 cloudflare:
   accountId: "REPLACE_ME_ACCOUNT_ID"
-  tunnelName: "guacamole"
+  tunnelName: "openclaw-guacamole"
   tunnelId: "REPLACE_ME_TUNNEL_ID"
-  credentialsSecretName: "cloudflared-guacamole-credentials"
+  credentialsSecretName: "cloudflare-tunnel-token"
+  namespace: "cloudflare-tunnel"
 
 hostname: "guacamole.example.com"
 
@@ -24,5 +24,6 @@ access:
     - "REPLACE_ME_IDP_GROUP"
 
 notes:
-  - "Cloudflare Access must be in front of the hostname before public DNS is enabled."
-  - "Do not place real tokens or secret material in this file."
+  - "Cloudflare Access must protect the hostname before public DNS routes traffic to Guacamole."
+  - "Do not put real tokens, passwords, or secret material in this file."
+  - "Check the final chart schema before wiring these keys into a real deployment."

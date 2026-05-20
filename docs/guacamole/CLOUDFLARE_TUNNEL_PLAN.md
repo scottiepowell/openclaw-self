@@ -2,7 +2,7 @@
 
 ## Goal
 
-Expose Guacamole later through Cloudflare Tunnel and Cloudflare Access without changing the internal-first install.
+Prepare the final secretless scaffolding for Cloudflare Tunnel and Cloudflare Access without deploying anything yet.
 
 ## Keep from phase 1
 
@@ -40,11 +40,14 @@ Cloudflare Access should be configured before any public DNS route points at Gua
   http://guacamole-guacamole.guacamole.svc.cluster.local:80
   ```
 
-## Example-only reference
+## Final prep scaffolding
 
-- `helm/cloudflare-tunnel/values-guacamole.example.yaml`
-- This file is a draft/example and does not deploy anything by itself.
-- Target chart should be documented in the example file header.
+- Runbook: `docs/guacamole/CLOUDFLARE_REMOTE_ACCESS_RUNBOOK.md`
+- Example Helm values: `helm/cloudflare-tunnel/values-guacamole.example.yaml`
+- Example secret helper: `scripts/guacamole/create-cloudflare-tunnel-secret.example.sh`
+- Readiness check: `scripts/guacamole/verify-cloudflare-readiness.sh`
+- Origin smoke test: `scripts/guacamole/test-cloudflare-origin.sh`
+- Example deploy wrapper: `scripts/guacamole/deploy-cloudflare-tunnel.example.sh`
 
 ## Migration checklist
 
@@ -55,6 +58,7 @@ Cloudflare Access should be configured before any public DNS route points at Gua
 5. Create Cloudflare Tunnel and Access config outside this repo.
 6. Enable tunnel routing only after Access is in front of the hostname.
 7. Re-check login and upload/download flows.
+8. Keep the token in a Kubernetes Secret only; do not commit it.
 
 ## Not in scope yet
 

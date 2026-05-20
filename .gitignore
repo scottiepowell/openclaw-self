@@ -13,6 +13,13 @@ openclaw.env
 .env.*
 !.env.example
 
+# Cloudflare / tunnel local secrets
+.env.cloudflare
+*.cloudflare-token
+*tunnel-token*
+helm/cloudflare-tunnel/values-guacamole.local.yaml
+helm/cloudflare-tunnel/*.secret.yaml
+
 # ----------------------------
 # Live OpenClaw config
 # ----------------------------
