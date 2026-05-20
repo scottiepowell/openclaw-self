@@ -1,0 +1,28 @@
+# Draft/example only.
+# Target: a Cloudflare Tunnel Helm chart or wrapper chart that deploys cloudflared.
+# This file does not contain secrets and does not deploy anything by itself.
+# Adjust the keys below to match the actual chart schema before use.
+
+cloudflare:
+  accountId: "REPLACE_ME_ACCOUNT_ID"
+  tunnelName: "guacamole"
+  tunnelId: "REPLACE_ME_TUNNEL_ID"
+  credentialsSecretName: "cloudflared-guacamole-credentials"
+
+hostname: "guacamole.example.com"
+
+originService:
+  url: "http://guacamole-guacamole.guacamole.svc.cluster.local:80"
+  serviceName: "guacamole-guacamole"
+  namespace: "guacamole"
+
+access:
+  policyName: "Guacamole Access"
+  allowedEmails:
+    - "REPLACE_ME@example.com"
+  allowedGroups:
+    - "REPLACE_ME_IDP_GROUP"
+
+notes:
+  - "Cloudflare Access must be in front of the hostname before public DNS is enabled."
+  - "Do not place real tokens or secret material in this file."
