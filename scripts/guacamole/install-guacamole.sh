@@ -52,5 +52,4 @@ helm upgrade --install "$RELEASE" "$CHART" \
   -f "$VALUES_FILE"
 
 echo "[3/3] Done"
-echo "Port-forward test: kubectl -n $NAMESPACE port-forward svc/$RELEASE 8080:80"
-
+echo "Port-forward test: kubectl -n $NAMESPACE port-forward svc/${RELEASE}-guacamole 8080:80"

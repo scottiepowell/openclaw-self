@@ -8,6 +8,8 @@
 # Cluster note:
 # - Use the NFS-backed StorageClass here.
 # - Current cluster has `nfs-client` and `nfs-static`; this scaffold assumes `nfs-client`.
+# - Temporary scheduling pin keeps Guacamole + PostgreSQL on worker-01 because
+#   the devops node currently cannot route to the PostgreSQL pod/service CIDR.
 
 nameOverride: ""
 fullnameOverride: ""
@@ -28,6 +30,11 @@ guacamole:
   contextPath: ROOT
   extraEnv: []
 
+# Temporary workaround: keep the app pod on the same worker as PostgreSQL.
+# Remove after cluster pod-to-pod routing is fixed and verify with Helm upgrade.
+nodeSelector:
+  kubernetes.io/hostname: worker-01
+
 proxy:
   enabled: true
   ipHeader: X-Forwarded-For
@@ -46,7 +53,9 @@ database:
   type: postgresql
 
 initDb:
-  enabled: true
+  # Already bootstrapped in this cluster; keep the post-install hook disabled
+  # until the chart exposes node scheduling for it.
+  enabled: false
 
 service:
   type: ClusterIP
@@ -69,6 +78,8 @@ backup:
 postgresql:
   enabled: true
   architecture: standalone
+  nodeSelector:
+    kubernetes.io/hostname: worker-01
   auth:
     database: guacamole_db
     username: guacamole_user
@@ -83,4 +94,3 @@ postgresql:
 
 mysql:
   enabled: false
-

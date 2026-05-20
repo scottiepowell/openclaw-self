@@ -24,6 +24,14 @@
   - `nfs-client`
   - `nfs-static`
 - For this install, use `nfs-client` for PostgreSQL persistence unless the cluster owner wants a different NFS class
+- Temporary scheduling workaround:
+  - Pin Guacamole and PostgreSQL to `kubernetes.io/hostname=worker-01`
+  - Reason: the `devops` node currently returns `No route to host` when a pod tries to reach the PostgreSQL service/pod network
+  - Remove this after the cluster routing issue is fixed and re-run `helm upgrade`
+- Init hook workaround:
+  - `initDb.enabled` is currently off in local values because the chart's post-install schema job does not expose node scheduling controls and was repeatedly landing on `devops`
+  - The schema is already initialized in this cluster
+  - Re-enable only for a fresh bootstrap or after the chart adds scheduling controls for the hook
 
 ## Local phase
 
@@ -54,10 +62,19 @@
 ## Port-forward test
 
 ```bash
-kubectl -n guacamole port-forward svc/guacamole 8080:80
+kubectl -n guacamole port-forward svc/guacamole-guacamole 8080:80
 ```
 
 Then open `http://127.0.0.1:8080/`.
+
+## Release health checks
+
+- Confirm Helm is healthy:
+  - `helm -n guacamole status guacamole`
+- Confirm scheduling pin is still present in rendered output:
+  - `bash scripts/guacamole/test-guacamole.sh`
+- Confirm the live deployment is still on `worker-01`:
+  - `kubectl -n guacamole describe deploy guacamole-guacamole`
 
 ## Rollback
 
@@ -77,4 +94,3 @@ scripts/guacamole/uninstall-guacamole.sh
 - Keep PostgreSQL on NFS-backed storage.
 - Do not expose ingress until the Cloudflare Tunnel phase is ready.
 - Change the default Guacamole admin password immediately after first login.
-

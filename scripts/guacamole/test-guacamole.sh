@@ -19,6 +19,9 @@ fi
 echo "[1/4] Helm render check"
 helm template "$RELEASE" "$CHART" -n "$NAMESPACE" -f "$VALUES_FILE" >/tmp/${RELEASE}-guacamole-test-render.yaml
 
+echo "[1b/4] Rendered scheduling hints"
+grep -nE 'nodeSelector:|kubernetes.io/hostname: worker-01' /tmp/${RELEASE}-guacamole-test-render.yaml || true
+
 echo "[2/4] Cluster objects"
 kubectl -n "$NAMESPACE" get deploy,sts,svc,pvc 2>/dev/null || true
 
@@ -26,6 +29,5 @@ echo "[3/4] Release status"
 helm -n "$NAMESPACE" status "$RELEASE" || true
 
 echo "[4/4] Port-forward test command"
-echo "kubectl -n $NAMESPACE port-forward svc/$RELEASE 8080:80"
+echo "kubectl -n $NAMESPACE port-forward svc/${RELEASE}-guacamole 8080:80"
 echo "Then open http://127.0.0.1:8080/"
-
