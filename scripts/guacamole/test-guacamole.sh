@@ -19,7 +19,15 @@ fi
 echo "[1/4] Helm render check"
 helm template "$RELEASE" "$CHART" -n "$NAMESPACE" -f "$VALUES_FILE" >/tmp/${RELEASE}-guacamole-test-render.yaml
 
-echo "[1b/4] Rendered scheduling hints"
+echo "[1b/4] TOTP enabled in values"
+awk '
+  /^totp:/ { in_totp=1; next }
+  in_totp && /^[^[:space:]]/ { in_totp=0 }
+  in_totp && /enabled:[[:space:]]*true/ { found=1 }
+  END { exit(found ? 0 : 1) }
+' "$VALUES_FILE" || { echo "[ERROR] totp.enabled is not true in $VALUES_FILE"; exit 1; }
+
+echo "[1c/4] Rendered scheduling hints"
 grep -nE 'nodeSelector:|kubernetes.io/hostname: worker-01' /tmp/${RELEASE}-guacamole-test-render.yaml || true
 
 echo "[2/4] Cluster objects"

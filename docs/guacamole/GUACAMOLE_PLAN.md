@@ -41,6 +41,7 @@
 - PostgreSQL: enabled
 - PostgreSQL persistence: NFS-backed PVC
 - Cloudflare Tunnel: not deployed yet
+- TOTP: enabled in Helm values; enroll from the Guacamole UI after first login
 
 ## LAN access phase
 

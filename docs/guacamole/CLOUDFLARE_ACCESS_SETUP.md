@@ -1,6 +1,6 @@
 # Guacamole Cloudflare Access Setup
 
-This is the future exposure path for Guacamole. It is a planning guide only.
+This is an optional future hardening guide for Guacamole. It is a planning guide only.
 
 ## Intended request path
 
@@ -13,12 +13,12 @@ Internet
   -> Guacamole app
 ```
 
-## Required order
+## Required order if Scott chooses to add Access later
 
 1. Keep Guacamole internal-only.
 2. Confirm the local UI security gate is complete.
-3. Configure Cloudflare Access first.
-4. Only then create DNS routing to the tunnel.
+3. Decide whether Access is needed at all.
+4. If used, configure Cloudflare Access before publishing DNS.
 5. Do not enable Kubernetes ingress for this flow.
 
 ## Manual security gate
@@ -64,6 +64,6 @@ Before any public exposure, Scott must confirm these UI steps locally:
 
 ## Notes
 
-- Access should protect the hostname before the request reaches Guacamole.
-- Do not publish DNS routes until Access is in place.
+- If enabled, Access should protect the hostname before the request reaches Guacamole.
+- Do not publish DNS routes until Access is in place, if Access is being used.
 - Do not copy real tokens or secrets into this repo.

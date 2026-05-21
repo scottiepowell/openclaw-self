@@ -1,7 +1,7 @@
-# Future Cloudflare Tunnel values
+# Cloudflare Tunnel planning values for the future public phase.
 #
-# This file is a planning scaffold only.
-# Do not apply Cloudflare exposure until the tunnel, DNS, and access policy are ready.
+# Tunnel is the connectivity path; Cloudflare Access is optional hardening later.
+# Do not apply public exposure until Scott approves the tunnel deployment.
 
 nameOverride: ""
 fullnameOverride: ""
@@ -11,15 +11,16 @@ service:
   port: 80
 
 ingress:
+  enabled: false
+
+totp:
+  # Keep built-in TOTP enabled for the final public path.
   enabled: true
-  ingressClassName: cloudflare
-  annotations: {}
-  hosts:
-    - host: guacamole.example.com
-      paths:
-        - path: /
-          pathType: Prefix
-  tls: []
+
+cloudflareTunnel:
+  # Placeholder for docs only; the chart does not deploy Cloudflare Tunnel itself.
+  publicHostname: "guacamole.example.com"
+  originService: "http://guacamole-guacamole.guacamole.svc.cluster.local:80"
 
 postgresql:
   enabled: true

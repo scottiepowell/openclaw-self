@@ -6,21 +6,19 @@ It is scaffolding only. Do not deploy the tunnel yet.
 ## Target path
 
 ```text
-Internet
-  -> Cloudflare Access policy
-  -> Cloudflare Tunnel
+Browser
+  -> Cloudflare Tunnel public hostname
   -> cloudflared pod in Kubernetes
   -> http://guacamole-guacamole.guacamole.svc.cluster.local:80
-  -> Guacamole app
+  -> Guacamole login + TOTP
 ```
 
 ## Operator sequence
 
 1. Confirm Guacamole local or LAN login works.
 2. Confirm default credentials are changed or disabled.
-3. In Cloudflare Zero Trust, create an Access application for the Guacamole hostname.
-4. Create an Access policy allowing only Scott's email or chosen identity group.
-5. Create a remotely managed Cloudflare Tunnel named something like:
+3. In Cloudflare Zero Trust, decide whether Access is needed. It is optional for this phase.
+4. Create a remotely managed Cloudflare Tunnel named something like:
 
    ```text
    openclaw-guacamole
@@ -36,7 +34,7 @@ Internet
    ```
 
 8. Tell OpenClaw only that the secret exists; do not send the token through Git or Discord.
-9. Only after the secret exists and Access protects the hostname, run the future deploy task.
+8. Only after the secret exists, run the future deploy task.
 
 ## Manual prerequisites to gather
 
@@ -46,7 +44,7 @@ Internet
 - Tunnel ID
 - Kubernetes secret name, for example `cloudflare-tunnel-token`
 - Kubernetes namespace, for example `cloudflare-tunnel`
-- Access policy allowed emails or identity provider group
+- Optional future Access policy allowed emails or identity provider group
 - Origin service target:
 
   ```text
@@ -71,6 +69,6 @@ Internet
 
 ## Notes
 
-- Cloudflare Access must exist before public DNS can reach Guacamole.
+- Cloudflare Access is optional for this phase and can be added later as hardening.
 - The Guacamole service should remain internal-first; the future tunnel should point at the ClusterIP service DNS name, not the NodePort.
 - If the LAN NodePort exists, it is still separate from Cloudflare planning.

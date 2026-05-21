@@ -2,7 +2,7 @@
 
 ## Goal
 
-Prepare the final secretless scaffolding for Cloudflare Tunnel and Cloudflare Access without deploying anything yet.
+Prepare the final secretless scaffolding for Cloudflare Tunnel without deploying anything yet.
 
 ## Keep from phase 1
 
@@ -14,17 +14,17 @@ Prepare the final secretless scaffolding for Cloudflare Tunnel and Cloudflare Ac
 ## Intended path
 
 ```text
-Internet
-  -> Cloudflare Access policy
-  -> Cloudflare Tunnel
+Browser
+  -> Cloudflare Tunnel public hostname
   -> cloudflared pod in Kubernetes
   -> svc/guacamole-guacamole.guacamole.svc.cluster.local:80
-  -> Guacamole app
+  -> Guacamole login + TOTP
 ```
 
-## Access before DNS
+## Access is optional later
 
-Cloudflare Access should be configured before any public DNS route points at Guacamole. The hostname should be protected before traffic can reach the app.
+Cloudflare Access is an optional future hardening layer in front of the hostname.
+It is **not required** for the current tunnel-only phase.
 
 ## Suggested inputs
 
@@ -33,7 +33,7 @@ Cloudflare Access should be configured before any public DNS route points at Gua
 - Tunnel name: placeholder only
 - Tunnel ID: placeholder only
 - Kubernetes secret name for tunnel credentials: placeholder only
-- Access policy allowed emails or identity provider group: placeholder only
+- Optional future Access policy allowed emails or identity provider group: placeholder only
 - Origin service:
 
   ```text
@@ -52,11 +52,11 @@ Cloudflare Access should be configured before any public DNS route points at Gua
 ## Migration checklist
 
 1. Confirm the local install is healthy.
-2. Confirm the Guacamole UI security gate is complete.
+2. Confirm Guacamole TOTP works locally or over LAN.
 3. Decide on hostname, tunnel name, and tunnel ID.
-4. Gather Cloudflare account and Access policy details.
-5. Create Cloudflare Tunnel and Access config outside this repo.
-6. Enable tunnel routing only after Access is in front of the hostname.
+4. Gather Cloudflare account and tunnel token details.
+5. Create Cloudflare Tunnel config outside this repo.
+6. Add Cloudflare Access later only if Scott wants an identity gate.
 7. Re-check login and upload/download flows.
 8. Keep the token in a Kubernetes Secret only; do not commit it.
 
@@ -65,3 +65,4 @@ Cloudflare Access should be configured before any public DNS route points at Gua
 - Cloudflare deployment manifests
 - DNS changes
 - Public exposure
+- Cloudflare Access policies for this phase

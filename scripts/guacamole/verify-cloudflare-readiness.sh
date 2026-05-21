@@ -80,7 +80,7 @@ echo "[7/8] Documentation present"
 echo "[8/8] Manual readiness reminders"
 echo "  - Confirm Guacamole login works locally or via the LAN path"
 echo "  - Confirm the default guacadmin password was changed or disabled"
-echo "  - Confirm Cloudflare Access protects the hostname before DNS is published"
+echo "  - Cloudflare Access is optional future hardening; DNS can be published once Tunnel and TOTP are ready"
 echo "  - Confirm the tunnel token exists as a Kubernetes Secret, not in Git"
 echo "  - Do not deploy cloudflared yet"
 

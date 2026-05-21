@@ -17,6 +17,7 @@ originService:
   namespace: "guacamole"
 
 access:
+  # Optional future hardening; not required for the tunnel-only phase.
   policyName: "Guacamole Access"
   allowedEmails:
     - "REPLACE_ME@example.com"
@@ -24,6 +25,6 @@ access:
     - "REPLACE_ME_IDP_GROUP"
 
 notes:
-  - "Cloudflare Access must protect the hostname before public DNS routes traffic to Guacamole."
+  - "Cloudflare Access is optional; add it later only if Scott wants an identity gate."
   - "Do not put real tokens, passwords, or secret material in this file."
   - "Check the final chart schema before wiring these keys into a real deployment."

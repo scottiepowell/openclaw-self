@@ -45,8 +45,8 @@ http://127.0.0.1:8080/
 - Keep the main Kubernetes service as `ClusterIP`
 - Use the separate NodePort service only for trusted LAN access
 - Do not enable ingress unless explicitly approved
-- Do not expose Guacamole through Cloudflare until Cloudflare Access is configured
-- Cloudflare Access must protect the Guacamole hostname before the request reaches the app
+- Do not expose Guacamole through Cloudflare until the tunnel plan and TOTP are approved
+- Cloudflare Access is optional future hardening, not a requirement for this phase
 - Keep the LAN NodePort path trusted-only until the admin credentials are changed
 
 ## Cluster note

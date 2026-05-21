@@ -47,7 +47,8 @@ saml:
   enabled: false
 
 totp:
-  enabled: false
+  # Enable Guacamole's built-in TOTP extension for the local/LAN phase.
+  enabled: true
 
 database:
   type: postgresql
