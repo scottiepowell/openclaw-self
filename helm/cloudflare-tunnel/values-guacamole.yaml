@@ -1,0 +1,33 @@
+# Guacamole Cloudflare Tunnel values
+#
+# Uses the helmforge/cloudflared chart.
+# The dashboard manages hostname routing; this chart only runs the tunnel connector.
+
+nameOverride: ""
+fullnameOverride: ""
+commonLabels:
+  app.kubernetes.io/part-of: guacamole
+
+tunnel:
+  existingSecret: "cloudflared-guacamole-token"
+  existingSecretKey: "token"
+
+replicaCount: 2
+
+serviceAccount:
+  create: false
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+  port: 2000
+
+metrics:
+  enabled: true
+
+nodeSelector:
+  kubernetes.io/hostname: worker-01
+

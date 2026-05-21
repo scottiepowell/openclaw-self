@@ -17,7 +17,6 @@ Prepare the final secretless scaffolding for Cloudflare Tunnel without deploying
 Browser
   -> Cloudflare Tunnel public hostname
   -> cloudflared pod in Kubernetes
-  -> svc/guacamole-guacamole.guacamole.svc.cluster.local:80
   -> Guacamole login + TOTP
 ```
 
@@ -25,6 +24,7 @@ Browser
 
 Cloudflare Access is an optional future hardening layer in front of the hostname.
 It is **not required** for the current tunnel-only phase.
+Hostname routing is configured in the Cloudflare dashboard; this repo only runs the tunnel connector.
 
 ## Suggested inputs
 
@@ -32,7 +32,7 @@ It is **not required** for the current tunnel-only phase.
 - Cloudflare account ID: placeholder only
 - Tunnel name: placeholder only
 - Tunnel ID: placeholder only
-- Kubernetes secret name for tunnel credentials: placeholder only
+- Kubernetes secret name for tunnel credentials: `cloudflared-guacamole-token`
 - Optional future Access policy allowed emails or identity provider group: placeholder only
 - Origin service:
 
@@ -43,11 +43,13 @@ It is **not required** for the current tunnel-only phase.
 ## Final prep scaffolding
 
 - Runbook: `docs/guacamole/CLOUDFLARE_REMOTE_ACCESS_RUNBOOK.md`
+- Live Helm values: `helm/cloudflare-tunnel/values-guacamole.yaml`
 - Example Helm values: `helm/cloudflare-tunnel/values-guacamole.example.yaml`
-- Example secret helper: `scripts/guacamole/create-cloudflare-tunnel-secret.example.sh`
+- Secret helper: `scripts/guacamole/create-cloudflare-tunnel-secret.example.sh`
 - Readiness check: `scripts/guacamole/verify-cloudflare-readiness.sh`
 - Origin smoke test: `scripts/guacamole/test-cloudflare-origin.sh`
-- Example deploy wrapper: `scripts/guacamole/deploy-cloudflare-tunnel.example.sh`
+- Deploy wrapper: `scripts/guacamole/deploy-cloudflare-tunnel.sh`
+- Uninstall wrapper: `scripts/guacamole/uninstall-cloudflare-tunnel.sh`
 
 ## Migration checklist
 

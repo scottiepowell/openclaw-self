@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-NAMESPACE="${NAMESPACE:-cloudflare-tunnel}"
-SECRET_NAME="${SECRET_NAME:-cloudflare-tunnel-token}"
+NAMESPACE="${NAMESPACE:-cloudflare}"
+SECRET_NAME="${SECRET_NAME:-cloudflared-guacamole-token}"
 TOKEN_FILE="${TOKEN_FILE:-}"
 TOKEN="${TUNNEL_TOKEN:-}"
 
@@ -30,7 +30,7 @@ if kubectl -n "$NAMESPACE" get secret "$SECRET_NAME" >/dev/null 2>&1; then
 fi
 
 kubectl -n "$NAMESPACE" create secret generic "$SECRET_NAME" \
-  --from-literal=TUNNEL_TOKEN="$TOKEN" >/dev/null
+  --from-literal=token="$TOKEN" >/dev/null
 
 echo "[OK] namespace ready: $NAMESPACE"
 echo "[OK] secret ready: $NAMESPACE/$SECRET_NAME"

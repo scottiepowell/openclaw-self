@@ -1,30 +1,13 @@
-# Example-only scaffolding for a future Cloudflare Tunnel Helm chart.
-# Target chart: verify the actual chart schema before use.
+# Example-only scaffolding for the Cloudflare Tunnel Helm chart.
+# Target chart: helmforge/cloudflared.
 # This file is secretless and does not deploy anything by itself.
 
-cloudflare:
-  accountId: "REPLACE_ME_ACCOUNT_ID"
-  tunnelName: "openclaw-guacamole"
-  tunnelId: "REPLACE_ME_TUNNEL_ID"
-  credentialsSecretName: "cloudflare-tunnel-token"
-  namespace: "cloudflare-tunnel"
-
-hostname: "guacamole.example.com"
-
-originService:
-  url: "http://guacamole-guacamole.guacamole.svc.cluster.local:80"
-  serviceName: "guacamole-guacamole"
-  namespace: "guacamole"
-
-access:
-  # Optional future hardening; not required for the tunnel-only phase.
-  policyName: "Guacamole Access"
-  allowedEmails:
-    - "REPLACE_ME@example.com"
-  allowedGroups:
-    - "REPLACE_ME_IDP_GROUP"
+tunnel:
+  existingSecret: "cloudflared-guacamole-token"
+  existingSecretKey: "token"
 
 notes:
   - "Cloudflare Access is optional; add it later only if Scott wants an identity gate."
   - "Do not put real tokens, passwords, or secret material in this file."
-  - "Check the final chart schema before wiring these keys into a real deployment."
+  - "The token secret belongs in the cloudflare namespace and must be created manually."
+  - "Hostname routing is configured in the Cloudflare dashboard, not in this chart."

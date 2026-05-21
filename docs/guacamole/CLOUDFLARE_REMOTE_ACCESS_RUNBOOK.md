@@ -1,7 +1,7 @@
 # Guacamole Cloudflare Remote Access Runbook
 
 This is the final operator checklist before deploying Cloudflare Tunnel.
-It is scaffolding only. Do not deploy the tunnel yet.
+It is scaffolding only.
 
 ## Target path
 
@@ -9,7 +9,6 @@ It is scaffolding only. Do not deploy the tunnel yet.
 Browser
   -> Cloudflare Tunnel public hostname
   -> cloudflared pod in Kubernetes
-  -> http://guacamole-guacamole.guacamole.svc.cluster.local:80
   -> Guacamole login + TOTP
 ```
 
@@ -17,7 +16,7 @@ Browser
 
 1. Confirm Guacamole local or LAN login works.
 2. Confirm default credentials are changed or disabled.
-3. In Cloudflare Zero Trust, decide whether Access is needed. It is optional for this phase.
+3. In Cloudflare Zero Trust, create the tunnel only; Access is optional later.
 4. Create a remotely managed Cloudflare Tunnel named something like:
 
    ```text
@@ -28,9 +27,9 @@ Browser
 7. Create the Kubernetes namespace and secret manually:
 
    ```bash
-   kubectl create namespace cloudflare-tunnel
-   kubectl -n cloudflare-tunnel create secret generic cloudflare-tunnel-token \
-     --from-literal=TUNNEL_TOKEN='PASTE_REAL_TOKEN_HERE'
+   kubectl create namespace cloudflare
+   kubectl -n cloudflare create secret generic cloudflared-guacamole-token \
+     --from-literal=token='PASTE_REAL_TOKEN_HERE'
    ```
 
 8. Tell OpenClaw only that the secret exists; do not send the token through Git or Discord.
@@ -42,10 +41,10 @@ Browser
 - Cloudflare account ID
 - Tunnel name, for example `openclaw-guacamole`
 - Tunnel ID
-- Kubernetes secret name, for example `cloudflare-tunnel-token`
-- Kubernetes namespace, for example `cloudflare-tunnel`
+- Kubernetes secret name, `cloudflared-guacamole-token`
+- Kubernetes namespace, `cloudflare`
 - Optional future Access policy allowed emails or identity provider group
-- Origin service target:
+- Origin service target is the Guacamole ClusterIP service:
 
   ```text
   http://guacamole-guacamole.guacamole.svc.cluster.local:80
@@ -53,11 +52,13 @@ Browser
 
 ## Secretless repo scaffolding
 
+- Live Helm values: `helm/cloudflare-tunnel/values-guacamole.yaml`
 - Example Helm values: `helm/cloudflare-tunnel/values-guacamole.example.yaml`
 - Example tunnel secret helper: `scripts/guacamole/create-cloudflare-tunnel-secret.example.sh`
+- Deploy wrapper: `scripts/guacamole/deploy-cloudflare-tunnel.sh`
+- Uninstall wrapper: `scripts/guacamole/uninstall-cloudflare-tunnel.sh`
 - Readiness check: `scripts/guacamole/verify-cloudflare-readiness.sh`
 - Origin smoke test: `scripts/guacamole/test-cloudflare-origin.sh`
-- Example deploy wrapper: `scripts/guacamole/deploy-cloudflare-tunnel.example.sh`
 
 ## Hard stop rules
 
