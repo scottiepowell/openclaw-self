@@ -1,0 +1,24 @@
+# Mailbox Response — 0012 openclaw-apps Discord channel hello-world
+
+- Files changed:
+  - `docs/discord-ttp.md`
+  - `.openclaw-mailbox/outbox/0012-setup-openclaw-apps-discord-channel-hello-world-response.md`
+- Channel ID/name recorded: yes
+  - `openclaw-apps`
+  - `1507382627651555480`
+- Hello-world sent to Discord: yes
+  - Message: `Hello from OpenClaw. The openclaw-apps channel is reachable. No project context is bound yet.`
+  - Message ID: `1507712813957644320`
+- Config/routing update:
+  - Added `#openclaw-apps` to `docs/discord-ttp.md` as a general app/project orchestration channel, with the future paper-trader binding explicitly deferred.
+- Validation:
+  - `make validate` passed
+  - `git diff --check` passed
+- Follow-up before binding to `openclaw-price-action-paper-trader`:
+  - explicit approval to bind this channel to that repo/app context
+- Commit SHA:
+  - `8bb7eae` (`docs: add openclaw-apps discord channel`)
+- Push result:
+  - `git push origin main` succeeded
+- Next action for Scott:
+  - approve the future paper-trader binding when ready; I’ll wire the project context after that.
