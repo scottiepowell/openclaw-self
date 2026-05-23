@@ -1,0 +1,21 @@
+# Mailbox Response — 0013 diagnose and wire `openclaw-apps`
+
+- Files changed:
+  - `docs/openclaw-apps-discord-channel-setup.md`
+  - `.openclaw-mailbox/outbox/0013-diagnose-wire-openclaw-apps-discord-channel-response.md`
+- Root cause / likely cause:
+  - `1507382627651555480` was missing from the live Discord guild allowlist in `/home/scott/.openclaw/openclaw.json`.
+  - Bot permissions were already fine.
+- Channel ID/name added:
+  - yes: `openclaw-apps` / `1507382627651555480`
+- Hello World posted:
+  - yes
+  - Message: `Hello from OpenClaw. The openclaw-apps channel is reachable. No app project context is bound yet.`
+  - Discord message ID: `1507749315441987665`
+- Reload/restart requirement:
+  - none
+  - `gateway config.patch` applied cleanly; `openclaw doctor --non-interactive` reported `Discord: ok` and no channel security warnings.
+- Exact next command Scott should run:
+  - none required for wiring
+- Safe to return to the paper-trader repo mailbox:
+  - yes
