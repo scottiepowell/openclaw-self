@@ -1,0 +1,72 @@
+# Local wger deployment values for the openclaw-self cluster.
+#
+# The install script resolves __NFS_STORAGE_CLASS__ at runtime from the
+# cluster's NFS dynamic provisioner, so this file stays readable and reusable.
+
+app:
+  timezone: "Etc/UTC"
+  global:
+    replicas: 1
+    image:
+      PullPolicy: IfNotPresent
+  # Needed for a practical local deployment; this enables the persistent
+  # media/static volumes and the gunicorn path used by the chart.
+  nginx:
+    enabled: true
+  persistence:
+    enabled: true
+    storageClass: "__NFS_STORAGE_CLASS__"
+    accessModes:
+      - ReadWriteMany
+    sizeMedia: 10Gi
+    sizeStatic: 2Gi
+    sizeCeleryBeat: 1Gi
+  axes:
+    enabled: false
+  mail:
+    enabled: false
+
+celery:
+  enabled: true
+  replicas: 1
+  replicasWorker: 1
+  syncExercises: true
+  syncImages: true
+  syncVideos: true
+
+ingress:
+  enabled: false
+
+service:
+  type: ClusterIP
+  port: 8000
+
+postgres:
+  enabled: true
+  settings:
+    superuser:
+      value: postgres
+    superuserPassword:
+      value: postgres
+  userDatabase:
+    name:
+      value: wger
+    user:
+      value: wger
+    password:
+      value: wger
+  service:
+    port: 5432
+  storage:
+    requestedSize: 10Gi
+    className: "__NFS_STORAGE_CLASS__"
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  storage:
+    requestedSize: 1Gi
+    className: "__NFS_STORAGE_CLASS__"
+  service:
+    serverPort: 6379

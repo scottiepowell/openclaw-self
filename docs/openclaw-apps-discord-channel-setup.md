@@ -63,3 +63,11 @@ None required for wiring.
 ## Safe to return to paper-trader mailbox?
 
 Yes.
+
+
+## Discord model switching notes
+
+- `fast` means the low-cost / quick cloud model.
+- `local` means the local Ollama-backed model for dev/test workflows.
+- Local model selection is dynamic: if Ollama is not running or `qwen2.5:7b` is not installed, `/model use local` will fail cleanly and no profile write will happen.
+- The openclaw-apps profile is channel-local and only allows the projects listed in its profile JSON.
