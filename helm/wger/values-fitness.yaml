@@ -1,0 +1,36 @@
+# wger fitness deployment values for Scott's homelab.
+#
+# This file captures the runtime settings that made the fitness app usable
+# through Cloudflare Tunnel and local SSH/kubectl port-forward testing.
+#
+# Apply this with the wger chart after confirming the chart's value keys:
+#   helm upgrade --install wger <wger-chart> -n fitness -f helm/wger/values-fitness.yaml
+#
+# NOTE: The upstream/community wger chart may use `env`, `extraEnv`, or a
+# chart-specific environment section. If the key differs, map the values below
+# into the chart's supported env-var mechanism rather than committing secrets.
+
+wger:
+  publicHostname: fitness.roadmaps.link
+  publicUrl: https://fitness.roadmaps.link
+
+  # Keep the app on a known-good worker until the node firewall/Calico settings
+  # are made persistent on every node and verified after reboot.
+  nodeSelector:
+    kubernetes.io/hostname: worker-01
+
+  extraEnv:
+    - name: CSRF_TRUSTED_ORIGINS
+      value: >-
+        https://fitness.roadmaps.link,http://127.0.0.1,http://127.0.0.1:18082,http://127.0.0.1:8082,http://localhost,http://localhost:18082,http://localhost:8082
+
+postgresql:
+  enabled: true
+  primary:
+    persistence:
+      enabled: true
+      storageClass: nfs-client
+      size: 10Gi
+
+redis:
+  enabled: true
