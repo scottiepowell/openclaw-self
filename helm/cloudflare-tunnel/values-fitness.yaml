@@ -1,0 +1,45 @@
+# Fitness / wger Cloudflare Tunnel values
+#
+# Uses the helmforge/cloudflared chart.
+# The Cloudflare dashboard manages hostname routing.
+#
+# Expected route:
+#   fitness.roadmaps.link
+#       -> http://wger-http.fitness.svc.cluster.local:8000
+#
+# Tunnel token secret must exist before deployment:
+#
+# kubectl create secret generic cloudflared-fitness-token \
+#   -n cloudflare \
+#   --from-literal=token='<CLOUDFLARE_TUNNEL_TOKEN>'
+
+nameOverride: ""
+fullnameOverride: ""
+
+commonLabels:
+  app.kubernetes.io/part-of: fitness
+
+tunnel:
+  existingSecret: "cloudflared-fitness-token"
+  existingSecretKey: "token"
+
+replicaCount: 2
+
+serviceAccount:
+  create: false
+
+pdb:
+  enabled: true
+  minAvailable: 1
+
+service:
+  type: ClusterIP
+  port: 2000
+
+metrics:
+  enabled: true
+
+# Keep cloudflared on a worker node while devops networking
+# persistence is still being finalized.
+nodeSelector:
+  kubernetes.io/hostname: worker-01
